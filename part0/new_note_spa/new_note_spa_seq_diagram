@@ -1,0 +1,23 @@
+title New Note Spa Sequence
+
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+note left of Browser: 
+By submitting the html form element, 
+the browser requests an http post to new_note_spa,
+sending the new note value,
+without reload the page with the preventDefault command
+end note
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server-->Browser: main.css
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+Server-->Browser: data.json
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+Server-->Browser: spa.js
+note right of Server: 
+Executing js-code, the server makes an http post request to new_note_spa,
+which adds the sent note to the existing notes array
+and sends to the browser the js-code to render the new note in the UI
+end note
+note left of Browser:
+With the js-code sent by the server, the browser renders the new note in the UI
+end note
