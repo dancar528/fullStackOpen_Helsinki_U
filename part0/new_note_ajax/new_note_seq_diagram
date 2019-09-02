@@ -1,0 +1,23 @@
+title New Note Ajax Sequence
+
+Browser->Server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+note left of Browser: 
+By submitting the html form element, 
+the browser requests an http post to new_note,
+sending the new note value
+end note
+Server-->Browser: 302 redirect status code to notes page
+note right of Server: 
+The server makes an http post request to new_note,
+executing js-code which add the sent note to the existing notes array,
+responding with a 302 status code 
+and redirecting to notes page
+end note
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+Server-->Browser: HTML code
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server-->Browser: main.css
+Browser->Server: https://fullstack-exampleapp.herokuapp.com/main.js
+Server-->Browser: main.js
+Browser->Server: https://fullstack-exampleapp.herokuapp.com/data.json
+Server-->Browser: data.json
