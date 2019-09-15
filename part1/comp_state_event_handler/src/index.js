@@ -8,7 +8,7 @@ const App = () => {
         bad: 0
     });
 
-    const setGood = (value) => {
+    const setGood = () => {
         const newfeedbacks = {
             ...feedbacks,
             good: feedbacks.good + 1
@@ -16,7 +16,7 @@ const App = () => {
         setFeedback(newfeedbacks);
     };
 
-    const setNeutral = (value) => {
+    const setNeutral = () => {
         const newfeedbacks = {
             ...feedbacks,
             neutral: feedbacks.neutral + 1
@@ -24,11 +24,11 @@ const App = () => {
         setFeedback(newfeedbacks);
     };
 
-    const setBad = (value) => {
+    const setBad = () => {
         const newfeedbacks = {
             ...feedbacks,
             bad: feedbacks.bad + 1
-        }
+        };
         setFeedback(newfeedbacks);
     };
 
@@ -45,6 +45,9 @@ const App = () => {
                 <p>Good: {feedbacks.good}</p>
                 <p>Neutral: {feedbacks.neutral}</p>
                 <p>Bad: {feedbacks.bad}</p>
+                <p>All: {feedbacks.good + feedbacks.neutral + feedbacks.bad}</p>
+                <p>Average: {(feedbacks.good + feedbacks.neutral + feedbacks.bad) / 3}</p>
+                <p>Positive: {(feedbacks.good / (feedbacks.good + feedbacks.neutral + feedbacks.bad)) * 100} %</p>
             </div>
         </div>
     )
