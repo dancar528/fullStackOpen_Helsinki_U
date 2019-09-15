@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import ReactDOM from 'react-dom'
 
-const Statitics = ({good, neutral, bad, all}) => {
+const Statitics = ({good, neutral, bad, all, average, positive}) => {
     const title = 'Statistics';
     if (all === 0) {
         return (
@@ -14,15 +14,23 @@ const Statitics = ({good, neutral, bad, all}) => {
     return (
         <div>
             <p><strong>{title}</strong></p>
-            <p>Good: {good}</p>
-            <p>Neutral: {neutral}</p>
-            <p>Bad: {bad}</p>
-            <p>All: {all}</p>
-            <p>Average: {all / 3}</p>
-            <p>Positive: {(good / all) * 100} %</p>
+            <Statitic text="Good" value={good} />
+            <Statitic text="Neutral" value={neutral} />
+            <Statitic text="Bad" value={bad} />
+            <Statitic text="All" value={all} />
+            <Statitic text="Average" value={average} />
+            <Statitic text="Positive" value={positive} suffix="%" />
         </div>
     );
 };
+
+const Statitic = ({text, value, suffix}) => (
+    <p>{text}: {value} {suffix}</p>
+);
+
+const Button = ({eventHandler, text}) => (
+    <button onClick={eventHandler}>{text}</button>
+);
 
 const App = () => {
     const [feedbacks, setFeedback] = useState({
@@ -58,21 +66,22 @@ const App = () => {
         };
         setFeedback(newfeedbacks);
     };
-    console.log(feedbacks);
 
     return (
         <div>
             <div>
                 <p><strong>Give Feedback</strong></p>
-                <button onClick={setGood}>Good</button>
-                <button onClick={setNeutral}>Neutral</button>
-                <button onClick={setBad}>Bad</button>
+                <Button eventHandler={setGood} text="Good" />
+                <Button eventHandler={setNeutral} text="Neutral" />
+                <Button eventHandler={setBad} text="Bad" />
             </div>
             <Statitics
                 good={feedbacks.good}
                 neutral={feedbacks.neutral}
                 bad={feedbacks.bad}
-                all={feedbacks.all} />
+                all={feedbacks.all}
+                average={feedbacks.all / 3}
+                positive={(feedbacks.good / feedbacks.all) * 100} />
         </div>
     )
 }
