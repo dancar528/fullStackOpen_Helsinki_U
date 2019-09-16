@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 const App = () => {
-    const [anecdote, setAnecdote] = useState(0);
     const anecdotes = [
         'Brooks Law: "Adding manpower to a late software project makes it later!"',
         `The best way to get a project done faster is to start sooner 
@@ -25,15 +24,28 @@ const App = () => {
         `A primary cause of complexity is that software vendors uncritically adopt almost any feature that users want.
         --Niklaus Wirth`
     ];
+    const [anecdoteIndex, setAnecdoteIndex] = useState(0);
+    const [points, setPoints] = useState(
+        Array.apply(null, new Array(anecdotes.length))
+            .map(Number.prototype.valueOf,0)
+    );
 
     const getAnecdote = () => {
         const randomIndex = Math.floor(Math.random() * anecdotes.length);
-        setAnecdote(randomIndex);
+        setAnecdoteIndex(randomIndex);
+    };
+
+    const voteAnecdote = (index) => () => {
+        const newPoints = [...points];
+        newPoints[index] += 1;
+        setPoints(newPoints);
     };
 
     return (
         <div>
-            <p>{anecdotes[anecdote]}</p>
+            <p>{anecdotes[anecdoteIndex]}</p>
+            <p>has {points[anecdoteIndex]} votes</p>
+            <button onClick={voteAnecdote(anecdoteIndex)}>Vote</button>
             <button onClick={getAnecdote}>Next anecdote</button>
         </div>
     );
