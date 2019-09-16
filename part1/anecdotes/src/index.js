@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+const Anecdote = ({title, anecdote, points, validateRender}) => {
+    if (validateRender && points === 0) {
+        return null;
+    }
+    return (
+        <div>
+            <p><strong>{title}</strong></p>
+            <p>{anecdote}</p>
+            <p>with {points} votes</p>
+        </div>
+    );
+};
+
 const App = () => {
     const anecdotes = [
         'Brooks Law: "Adding manpower to a late software project makes it later!"',
@@ -27,8 +40,9 @@ const App = () => {
     const [anecdoteIndex, setAnecdoteIndex] = useState(0);
     const [points, setPoints] = useState(
         Array.apply(null, new Array(anecdotes.length))
-            .map(Number.prototype.valueOf,0)
+            .map(Number.prototype.valueOf, 0)
     );
+    const [mostVotedIndex, setMostVoted] = useState(0);
 
     const getAnecdote = () => {
         const randomIndex = Math.floor(Math.random() * anecdotes.length);
@@ -39,14 +53,37 @@ const App = () => {
         const newPoints = [...points];
         newPoints[index] += 1;
         setPoints(newPoints);
+        getMostVoted(newPoints);
+    };
+
+    const getMostVoted = (newPoints) => {
+        let max = 0;
+        let maxIndex = 0;
+        for (let i = 0; i < newPoints.length; i++) {
+            if (newPoints[i] > max) {
+                max = newPoints[i];
+                maxIndex = i;
+            }
+        }
+        setMostVoted(maxIndex);
     };
 
     return (
         <div>
-            <p>{anecdotes[anecdoteIndex]}</p>
-            <p>has {points[anecdoteIndex]} votes</p>
-            <button onClick={voteAnecdote(anecdoteIndex)}>Vote</button>
-            <button onClick={getAnecdote}>Next anecdote</button>
+            <Anecdote
+                title="Anecdote of the day"
+                anecdote={anecdotes[anecdoteIndex]}
+                points={points[anecdoteIndex]}
+                validateRender={false} />
+            <div>
+                <button onClick={voteAnecdote(anecdoteIndex)}>Vote</button>
+                <button onClick={getAnecdote}>Next anecdote</button>
+            </div>
+            <Anecdote
+                title="Anecdote with most votes"
+                anecdote={anecdotes[mostVotedIndex]}
+                points={points[mostVotedIndex]}
+                validateRender={true} />
         </div>
     );
 };
