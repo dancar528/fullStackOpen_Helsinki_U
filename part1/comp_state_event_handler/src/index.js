@@ -14,18 +14,25 @@ const Statitics = ({good, neutral, bad, all, average, positive}) => {
     return (
         <div>
             <p><strong>{title}</strong></p>
-            <Statitic text="Good" value={good} />
-            <Statitic text="Neutral" value={neutral} />
-            <Statitic text="Bad" value={bad} />
-            <Statitic text="All" value={all} />
-            <Statitic text="Average" value={average} />
-            <Statitic text="Positive" value={positive} suffix="%" />
+            <table>
+                <tbody>
+                    <Statitic text="Good" value={good} />
+                    <Statitic text="Neutral" value={neutral} />
+                    <Statitic text="Bad" value={bad} />
+                    <Statitic text="All" value={all} />
+                    <Statitic text="Average" value={average} />
+                    <Statitic text="Positive" value={positive} suffix="%" />
+                </tbody>
+            </table>
         </div>
     );
 };
 
 const Statitic = ({text, value, suffix}) => (
-    <p>{text}: {value} {suffix}</p>
+    <tr>
+        <td>{text}</td>
+        <td>{value} {suffix}</td>
+    </tr>
 );
 
 const Button = ({eventHandler, text}) => (
