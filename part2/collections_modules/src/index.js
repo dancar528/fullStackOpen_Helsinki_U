@@ -22,8 +22,16 @@ const course = {
     ]
 };
 
+const Total = ({ parts }) => {
+    const total = parts.reduce(
+        (accumulator, currentVal, index, array) =>
+            accumulator + currentVal.exercises, 0
+    );
+    return <h3>Total of {total} exercises</h3>;
+};
+
 const Part = ({ name, exercises }) => (
-    <li>{name} {exercises}</li>
+    <div>{name} {exercises}</div>
 );
 
 const Content = ({ parts }) => parts.map(part => 
@@ -41,6 +49,7 @@ const Course = ({ name, parts }) => (
     <div>
         <Header name={name} />
         <Content parts={parts} />
+        <Total parts={parts} />
     </div>
 );
 
