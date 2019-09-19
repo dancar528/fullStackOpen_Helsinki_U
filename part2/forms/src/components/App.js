@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Filter from './Filter';
+import PersonForm from './PersonForm';
+import Persons from './Persons';
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -25,7 +28,8 @@ const App = () => {
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        const newNameIndex = persons.findIndex(person => person.name === newName);
+        const newNameIndex = persons.findIndex(person => 
+            person.name.toLowerCase() === newName.toLowerCase());
         if (newNameIndex > -1) {
             alert(`${newName} is already added to phonebook`);
             return;
@@ -40,36 +44,18 @@ const App = () => {
         setNewNumber('');
     };
 
-    const rows = () => {
-        const personsFilter = newSearch
-            ? persons.filter(person =>
-                person.name.toLowerCase().indexOf(newSearch.toLowerCase()) !== -1
-            )
-            : persons;
-        return personsFilter.map((person, index) =>
-            <div key={index}>{person.name} {person.number}</div>
-        );
-    };
-
     return (
         <div>
             <h2>Phonebook</h2>
-            <div>
-                filter shown with <input value={newSearch} onChange={handleSearchChange} />
-            </div>
-            <form onSubmit={handleFormSubmit}>
-                <div>
-                    name: <input value={newName} onChange={handleNameChange} />
-                </div>
-                <div>
-                    number: <input value={newNumber} onChange={handleNumberChange} />
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
-            <h2>Numbers</h2>
-            {rows()}
+            <Filter value={newSearch} handleSearchChange={handleSearchChange} />
+            <PersonForm
+                name={newName}
+                number={newNumber}
+                handleNameChange={handleNameChange}
+                handleNumberChange={handleNumberChange}
+                handleFormSubmit={handleFormSubmit} />
+            <h3>Numbers</h3>
+            <Persons search={newSearch} persons={persons} />
         </div>
     );
 };
