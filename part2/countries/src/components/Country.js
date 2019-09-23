@@ -1,4 +1,5 @@
 import React from 'react';
+import Weather from './Weather';
 
 const Languages = ({ languages }) => (
     <ul>
@@ -30,6 +31,7 @@ const Country = ({ country, detailed, handleShowMoreClick }) => {
             <h3>Languages</h3>
             <Languages languages={languages} />
             <div><img src={flag} alt={flag} height={100} /></div>
+            <Weather capital={capital} />
         </div>
     );
 };
