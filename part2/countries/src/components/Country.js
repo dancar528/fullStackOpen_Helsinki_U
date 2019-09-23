@@ -8,12 +8,15 @@ const Languages = ({ languages }) => (
     </ul>
 );
 
-const Country = ({ country, detailed }) => {
+const Country = ({ country, detailed, handleShowMoreClick }) => {
 
-    const { name, capital, population, languages, flag } = country;
-    
+    const { name, capital, population, languages, flag, numericCode } = country;
+
     if (!detailed) {
-        return <div>{name}</div>
+        return <div>
+            {name}
+            <button id={numericCode} onClick={handleShowMoreClick}>Show</button>
+        </div>
     }
     return (
         <div>
