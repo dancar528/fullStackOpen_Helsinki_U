@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
-import PersonService from './../services/persons';
+import personService from './../services/persons';
 
 const App = () => {
     const [persons, setPersons] = useState([]);
@@ -11,7 +11,7 @@ const App = () => {
     const [newSearch, setNewSearch] = useState('');
 
     useEffect(() => {
-        PersonService.getAll()
+        personService.getAll()
             .then(initialPersons => {
                 setPersons(initialPersons);
             });
@@ -34,14 +34,31 @@ const App = () => {
         const newNameIndex = persons.findIndex(person => 
             person.name.toLowerCase() === newName.toLowerCase());
         if (newNameIndex > -1) {
-            alert(`${newName} is already added to phonebook`);
+            const replaceConfirm = window.confirm(
+                `${newName} is already added to phonebook, replace the old number with a new one?`);
+            if (replaceConfirm) {
+                const newPerson = {
+                    ...persons[newNameIndex],
+                    number: newNumber
+                };
+                personService.update(newPerson)
+                    .then(data => {
+                        setPersons(persons.map((person, i) =>
+                            i !== newNameIndex ? person : data));
+                        setNewName('');
+                        setNewNumber('');
+                    });
+                return;
+            }
+            setNewName('');
+            setNewNumber('');
             return;
         }
         const newPerson = {
             name: newName,
             number: newNumber
         };
-        PersonService.create(newPerson)
+        personService.create(newPerson)
             .then(createdPerson => {
                 setPersons(persons.concat(createdPerson));
                 setNewName('');
@@ -58,7 +75,7 @@ const App = () => {
         const selectedIndex = persons.findIndex(person =>
                 person.id === parseInt(personId)
             );
-        PersonService.remove(personId)
+        personService.remove(personId)
             .then(_ => {
                 setPersons(persons.filter((_, i) => i !== selectedIndex));
             })
