@@ -43,9 +43,12 @@ const App = () => {
             name: newName,
             number: newNumber
         };
-        setPersons(persons.concat(newPerson));
-        setNewName('');
-        setNewNumber('');
+        axios.post(dbUrl, newPerson)
+            .then(response => {
+                setPersons(persons.concat(response.data));
+                setNewName('');
+                setNewNumber('');
+            });
     };
 
     return (
