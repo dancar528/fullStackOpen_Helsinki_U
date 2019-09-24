@@ -38,7 +38,6 @@ const App = () => {
             return;
         }
         const newPerson = {
-            ...persons,
             name: newName,
             number: newNumber
         };
@@ -48,6 +47,24 @@ const App = () => {
                 setNewName('');
                 setNewNumber('');
             });
+    };
+
+    const handleRemovePerson = (event) => {
+        const personName = event.target.attributes.name.value;
+        const confirmRemove = window.confirm(`Delete ${personName}?`);
+        if (!confirmRemove) return;
+
+        const personId = event.target.attributes.id.value;
+        const selectedIndex = persons.findIndex(person =>
+                person.id === parseInt(personId)
+            );
+        PersonService.remove(personId)
+            .then(_ => {
+                setPersons(persons.filter((_, i) => i !== selectedIndex));
+            })
+            .catch(error =>
+                alert(`Fail to remove ${personName}.`)
+            );
     };
 
     return (
@@ -61,7 +78,10 @@ const App = () => {
                 handleNumberChange={handleNumberChange}
                 handleFormSubmit={handleFormSubmit} />
             <h3>Numbers</h3>
-            <Persons search={newSearch} persons={persons} />
+            <Persons
+                search={newSearch}
+                persons={persons}
+                handleRemovePerson={handleRemovePerson} />
         </div>
     );
 };
