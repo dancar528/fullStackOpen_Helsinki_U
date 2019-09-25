@@ -104,13 +104,17 @@ const App = () => {
         const selectedIndex = persons.findIndex(person =>
                 person.id === parseInt(personId)
             );
+        let message = '',
+            type = '';
         personService.remove(personId)
             .then(_ => {
                 setPersons(persons.filter((_, i) => i !== selectedIndex));
             })
-            .catch(error =>
-                alert(`Fail to remove ${personName}.`)
-            );
+            .catch(error => {
+                message = `Information of ${personName} has already been removed from server`
+                type = 'error';
+                showNotification(message, type);
+            });
     };
 
     return (
