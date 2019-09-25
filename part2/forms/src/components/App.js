@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
+import Notification from './Notification';
 import personService from './../services/persons';
 
 const App = () => {
@@ -9,6 +10,10 @@ const App = () => {
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [newSearch, setNewSearch] = useState('');
+    const [notification, setNotification] = useState({
+        message: '',
+        type: ''
+    });
 
     useEffect(() => {
         personService.getAll()
@@ -33,9 +38,12 @@ const App = () => {
         event.preventDefault();
         const newNameIndex = persons.findIndex(person => 
             person.name.toLowerCase() === newName.toLowerCase());
+        let message = '',
+            type = '';
         if (newNameIndex > -1) {
             const replaceConfirm = window.confirm(
                 `${newName} is already added to phonebook, replace the old number with a new one?`);
+
             if (replaceConfirm) {
                 const newPerson = {
                     ...persons[newNameIndex],
@@ -43,10 +51,11 @@ const App = () => {
                 };
                 personService.update(newPerson)
                     .then(data => {
+                        message = `Replaced ${newPerson.name}`;
+                        type = 'success';
                         setPersons(persons.map((person, i) =>
                             i !== newNameIndex ? person : data));
-                        setNewName('');
-                        setNewNumber('');
+                        showNotification(message, type);
                     });
                 return;
             }
@@ -61,9 +70,29 @@ const App = () => {
         personService.create(newPerson)
             .then(createdPerson => {
                 setPersons(persons.concat(createdPerson));
-                setNewName('');
-                setNewNumber('');
+                message = `Added ${newPerson.name}`;
+                type = 'success';
+                showNotification(message, type);
             });
+    };
+
+    const showNotification = (message, type) => {
+        setNewName('');
+        setNewNumber('');
+        let newNotification = {
+            ...notification,
+            message: message,
+            type: type
+        };
+        setNotification(newNotification);
+        setTimeout(() => {
+            newNotification = {
+                ...notification,
+                message: '',
+                type: ''
+            };
+            setNotification(newNotification);
+        }, 5000);
     };
 
     const handleRemovePerson = (event) => {
@@ -87,6 +116,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification notification={notification} />
             <Filter value={newSearch} handleSearchChange={handleSearchChange} />
             <PersonForm
                 name={newName}
