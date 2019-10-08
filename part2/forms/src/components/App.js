@@ -50,11 +50,16 @@ const App = () => {
                     number: newNumber
                 };
                 personService.update(newPerson)
-                    .then(data => {
-                        message = `Replaced ${newPerson.name}`;
-                        type = 'success';
-                        setPersons(persons.map((person, i) =>
-                            i !== newNameIndex ? person : data));
+                    .then(updatedPerson => {
+                        if (updatedPerson.error) {
+                            message = updatedPerson.error;
+                            type = 'error';
+                        } else {
+                            message = `Replaced ${newPerson.name}`;
+                            type = 'success';
+                            setPersons(persons.map((person, i) =>
+                                i !== newNameIndex ? person : updatedPerson));
+                        }
                         showNotification(message, type);
                     });
                 return;
@@ -69,9 +74,14 @@ const App = () => {
         };
         personService.create(newPerson)
             .then(createdPerson => {
-                setPersons(persons.concat(createdPerson));
-                message = `Added ${newPerson.name}`;
-                type = 'success';
+                if (createdPerson.error) {
+                    message = createdPerson.error;
+                    type = 'error';
+                } else {
+                    setPersons(persons.concat(createdPerson));
+                    message = `Added ${newPerson.name}`;
+                    type = 'success';
+                }
                 showNotification(message, type);
             });
     };
@@ -102,7 +112,7 @@ const App = () => {
 
         const personId = event.target.attributes.id.value;
         const selectedIndex = persons.findIndex(person =>
-                person.id === parseInt(personId)
+                person.id === personId
             );
         let message = '',
             type = '';

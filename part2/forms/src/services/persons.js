@@ -9,7 +9,9 @@ const getAll = () => {
 
 const create = newPerson => {
     const request = axios.post(baseUrl, newPerson);
-    return request.then(response => response.data);
+    return request
+        .then(response => response.data)
+        .catch(error => error.response.data);
 };
 
 const remove = personId => {
@@ -21,7 +23,9 @@ const remove = personId => {
 
 const update = person => {
     const request = axios.put(`${baseUrl}/${person.id}`, person);
-    return request.then(response => response.data);
+    return request
+        .then(response => response.data)
+        .catch(error => error.response.data);
 };
 
 export default { getAll, create, remove, update };
